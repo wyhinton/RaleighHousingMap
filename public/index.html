@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+  <!-- <title>Mapping Equity</title> -->
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+    }
+  </style>
+
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==" crossorigin="" />
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Barlow+Condensed">
+
+  <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js" integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew==" crossorigin=""> </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-providers/1.9.1/leaflet-providers.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.heat/0.2.0/leaflet-heat.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-ajax/2.1.0/leaflet.ajax.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.1.0/papaparse.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.3.2/spin.min.js"></script>
+  <script src="https://unpkg.com/topojson@3.0.2/dist/topojson.min.js"></script>
+  <script src = "https://cdnjs.cloudflare.com/ajax/libs/countup.js/1.7.1/countUp.min.js" ></script>
+  <script src = "https://cdnjs.cloudflare.com/ajax/libs/snap.svg/0.5.1/snap.svg-min.js"></script>
+  <script src = "https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.js"></script>
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+
+  <script src = "plugins/Leaflet.fullscreen.min.js"></script>
+  <script src="plugins/leaflet.pattern-src.js"></script>
+  <script src="plugins/leaflet.spin.min.js"></script>
+  <script src="plugins/L.Control.Sidebar.js"></script>
+  <script src="plugins/leaflet-slider.js"></script>
+  <script src = "plugins/leaflet.zoomhome.min.js"></script>
+
+  <link rel="stylesheet" href='plugins/glider.min.css'>
+  <link rel="stylesheet" href='plugins/L.Control.Sidebar.css'>
+  <link rel="stylesheet" href='plugins/leaflet-slider.css'>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+  <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
+  <link rel="stylesheet" href="plugins/leaflet.zoomhome.css">
+  <link rel="stylesheet" href="myMapStyle.css">
+  <link rel="stylesheet" href="plugins/leaflet.fullscreen.css">
+
+
+</head>
+<!-- MAP -->
+
+
+<div>
+  <div id="leftSidebar">
+
+      <i class="fa fa-window-close fa-s" id = 'leftSidebarCloseButton'  onclick =  'toggleLeftGeneric()'></i>
+      <h1 id="leftSideBarHeading" ></h1>
+
+      <div data-slick = '{"slidesToShow":1, "slidesToScroll": 1, "autoplay": true, "autoplaySpeed": 1000, "lazyLoad": 'ondemand'}' id = "myCarousel">
+          <div class = "sliderContent">
+            <div class = 'slide'>
+               <image id="Image1" src="" class="carouselImage" >
+                 <a id = "Image1Attribution" class = "imgCaption" target = "_blank" >"caption"</a>
+            </div>
+          </div>
+        <div class = "sliderContent">
+          <div class = 'slide'>
+
+             <image id="Image2" src="" class="carouselImage" >
+            <a id = "Image2Attribution" class = "imgCaption" target = "_blank">"caption"</a>
+          </div>
+        </div>
+          <div class = "sliderContent">
+            <div class = 'slide'>
+              <image id="Image3" src="" class="carouselImage" >
+              <a id = "Image3Attribution" class = "imgCaption" target = "_blank">"caption"</a>
+            </div>
+          </div>
+          <div class = "sliderContent">
+            <div class = 'slide'>
+              <image id="Image4" src="" class="carouselImage" >
+              <a id = "Image4Attribution" class = "imgCaption" target = "_blank">"caption"</a>
+          </div>
+        </div>
+      </div>
+
+
+    <h2 class = "leftSideBarSectionHeader" >HISTORY</h2>
+    <div class = "sectionSeperator" ></div>
+    <p class = "leftSideBarText" id="leftSideBarHistoryText" > </p>
+    <h2 class ="leftSideBarSectionHeader" >MORE FACTS</h2>
+    <div class = "sectionSeperator" ></div>
+    <p class = "leftSideBarText" id="ExtraFacts" > </p>
+    <h2 class ="leftSideBarSectionHeader" >LEARN MORE</h2>
+    <div class = "sectionSeperator" ></div>
+    <ul>
+      <li>
+        <a class = 'moreBullet' id="InfoLink1" href="url" target = "_blank">link text</a>
+      <li>
+        <a class = 'moreBullet' id="InfoLink2" href="url" target = "_blank">link text2<a>
+      </li>
+    </ul>
+
+
+  </div>
+
+  <div id="rightSidebar">
+    <table class="myTable" id="styleReferenceTable">
+      <tr class = "headerRow" style = "border-style: solid;">
+        <td class="popUpTableVariableBig" id = "headerData"> <p id = 'rightControlHeader'> NEIGHBORHOOD DATA LEGEND</p><p class="howToUse">Use the interactive legend to visualize housing data from Raleigh's neighborhoods. Select different neighborhoods on the map to see their individual information. Move forwards and backwards in time with the year selector.</p>
+        </td>
+      </tr>
+
+      <tr>
+        <td class="dataVariableRight"></td>
+      <tr>
+      <tr>
+        <td class="dataVariableRight"></td>
+      </tr>
+      <tr>
+        <td class="dataVariableRight"></td>
+      </tr>
+      <tr>
+        <td class="dataVariableRight"></td>
+      </tr>
+      <tr id = "yearDisplayRow" class = "yearDisplayRow">
+          <td id = "yearChanger"> <button class="glider-prev" id = "testButton"> <i class="fa fa-chevron-left fa-xxs" id = "prevYearArrow" ></i>
+          </button><p id = "yearDisplay"> 2000</p>
+          <button class="glider-next" >
+            <i class="fa fa-chevron-right fa-xxs" id = "nextYearArrow"></i>
+          </button></td>
+      </tr>
+        <tr id = "selectionIndicatorHolder">
+            <td class = 'dateSelectionIndex' id = 'dateSelectionIndex_0' onclick = 'setFromSquares(this)' yr = '2000'></td>
+            <td class = 'dateSelectionIndex' id = 'dateSelectionIndex_1' onclick = 'setFromSquares(this)' yr = '2005'></td>
+            <td class = 'dateSelectionIndex' id = 'dateSelectionIndex_2' onclick = 'setFromSquares(this)'></td>
+            <td class = 'dateSelectionIndex' id = 'dateSelectionIndex_3' onclick = 'setFromSquares(this)'></td>
+            <td class = 'dateSelectionIndex' id = 'dateSelectionIndex_4' onclick = 'setFromSquares(this)'></td>
+        </tr>
+        <tr>
+            <td>
+              <div id = "dataDownloadButton">
+                <i class="fa fa-download" id = "downloadIcon"></i>
+                <p id = "dataDownloadButtonText">  DOWNLOAD ACTIVE FEATURES
+              </div>
+            </td>
+        </tr>
+    </table>
+    <p class = "howToUse" id = "historyToolTip" >
+
+      <i class="fa fa-info-circle"></i>
+      Click on one of the yellow neighborhoods to learn more about its history</p>
+    <button class = "testHistButton" id = "showHistoryButton">
+        <i class="fa fa-eye" id = "histButtonIcon"></i> <span id = "histButtonText">VIEW NEIGHBORHOOD HISTORIES</span>
+    </button>
+
+  </div>
+
+  <div id="mapContainer">
+    <div id="issMap">
+    </div>
+  </div>
+
+
+  <pattern id="diagonal-stripe-1" patternUnits="userSpaceOnUse" width="10" height="10">
+    <image
+      xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScxMCcgaGVpZ2h0PScxMCc+CiAgPHJlY3Qgd2lkdGg9JzEwJyBoZWlnaHQ9JzEwJyBmaWxsPSd3aGl0ZScvPgogIDxwYXRoIGQ9J00tMSwxIGwyLC0yCiAgICAgICAgICAgTTAsMTAgbDEwLC0xMAogICAgICAgICAgIE05LDExIGwyLC0yJyBzdHJva2U9J2JsYWNrJyBzdHJva2Utd2lkdGg9JzEnLz4KPC9zdmc+Cg=="
+      x="0" y="0" width="10" height="10">
+
+      <script src = "mapScript.js">
+
+      </script>
+
+</div>
+</html>
