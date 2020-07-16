@@ -2,7 +2,7 @@
 Project Team:  Tania Allen, Darrien Bailey, Webb Hinton, Sara Queen
 
 ## About
-An interactive web-map made with [Leaflet](https://leafletjs.com/) housing and history in Raleigh's neighborhoods. Check out a live demo [here](https://demomap-ecb3b.firebaseapp.com/). 
+An interactive web-map made with [Leaflet](https://leafletjs.com/) exploring housing and history in Raleigh's neighborhoods. Check out a live demo [here](https://demomap-ecb3b.firebaseapp.com/). 
 
 ![Demo1](/Images/mapOverview.png)
 
