@@ -10,7 +10,7 @@ This repository consists of two parts, the .js/.css/.html files used to render t
 
 ## Features
 
-* Modular code design allows for quick customization, easily swap out data sets, change legend colors, and edit layout
+* The code design allows for quick customization of legend, data sources, and layout
 * Interactive legend for displaying different data sets and changing data year
 * Ability to download active data as .geojson
 * Ability to switch between two sets of geoJSON features
