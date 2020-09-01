@@ -38,8 +38,8 @@
   <script src="plugins/leaflet.pattern-src.js"></script>
   <script src="plugins/leaflet.spin.min.js"></script>
   <script src="plugins/L.Control.Sidebar.js"></script>
-  <script src="plugins/leaflet-slider.js"></script>
   <script src = "plugins/leaflet.zoomhome.min.js"></script>
+  <script src = "googleSheetsImport.js"></script>
 
   <link rel="stylesheet" href='plugins/glider.min.css'>
   <link rel="stylesheet" href='plugins/L.Control.Sidebar.css'>
@@ -55,9 +55,17 @@
 
 </head>
 <!-- MAP -->
-
-
+<div id = 'toolBar'>
+  <button id = "showHistoryButton">
+      <i class="fa fa-eye" id = "histButtonIcon"></i> <span id = "histButtonText">VIEW NEIGHBORHOOD HISTORIES</span>
+  </button>
+  <button id = "dataDownloadButton">
+    <i class="fa fa-download" id = "downloadIcon"></i>
+    <span id = "dataDownloadButtonText">  DOWNLOAD ACTIVE FEATURES</span>
+  </button>
+</div>
 <div>
+
   <div id="leftSidebar">
 
       <i class="fa fa-window-close fa-s" id = 'leftSidebarCloseButton'  onclick =  'toggleLeftGeneric()'></i>
@@ -114,7 +122,10 @@
   <div id="rightSidebar">
     <table class="myTable" id="styleReferenceTable">
       <tr class = "headerRow" style = "border-style: solid;">
-        <td class="popUpTableVariableBig" id = "headerData"> <p id = 'rightControlHeader'> NEIGHBORHOOD DATA LEGEND</p><p class="howToUse">Use the interactive legend to visualize housing data from Raleigh's neighborhoods. Select different neighborhoods on the map to see their individual information. Move forwards and backwards in time with the year selector.</p>
+        <i class="fa fa-info-circle"></i>
+        <td class="popUpTableVariableBig" id = "headerData"> <p id = 'rightControlHeader'> NEIGHBORHOOD DATA LEGEND <img id = 'mainDataKeyInfoButton' src = 'data/info-24px.svg'></p>
+
+          <p class = 'howToUseInactive' id="howToUse">Use the interactive legend to visualize housing data from Raleigh's neighborhoods. Select different neighborhoods on the map to see their individual information. Move forwards and backwards in time with the year selector.</p>
         </td>
       </tr>
 
@@ -144,27 +155,25 @@
             <td class = 'dateSelectionIndex' id = 'dateSelectionIndex_3' onclick = 'setFromSquares(this)'></td>
             <td class = 'dateSelectionIndex' id = 'dateSelectionIndex_4' onclick = 'setFromSquares(this)'></td>
         </tr>
-        <tr>
+        <!-- <tr>
             <td>
               <div id = "dataDownloadButton">
                 <i class="fa fa-download" id = "downloadIcon"></i>
                 <p id = "dataDownloadButtonText">  DOWNLOAD ACTIVE FEATURES
               </div>
             </td>
-        </tr>
+        </tr> -->
     </table>
     <p class = "howToUse" id = "historyToolTip" >
 
       <i class="fa fa-info-circle"></i>
       Click on one of the yellow neighborhoods to learn more about its history</p>
-    <button class = "testHistButton" id = "showHistoryButton">
-        <i class="fa fa-eye" id = "histButtonIcon"></i> <span id = "histButtonText">VIEW NEIGHBORHOOD HISTORIES</span>
-    </button>
+
 
   </div>
 
   <div id="mapContainer">
-    <div id="issMap">
+    <div id="raleighHousingMap">
     </div>
   </div>
 
@@ -180,3 +189,4 @@
 
 </div>
 </html>
+\

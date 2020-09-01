@@ -40,6 +40,14 @@
 
 
        //LAYERS
+        // const historyDataURL = 'https://spreadsheets.google.com/feeds/cells/1ctMIVgrlfw0s9tYHcwuLuGjnrzI1YCaESEF18C4sIxM/1/public/full?alt=json'
+        // var historyData;
+        const historyDataURL = 'https://spreadsheets.google.com/feeds/cells/1v737sK8xWHYYvBx_7hI0NR_xvCy-32F8BwLtABuOHPI/1/public/full?alt=json'
+        var myImportedData = generateObjectFromSpreadData(historyDataURL, 1).then(function(returnData){
+          console.log(returnData)
+
+        })
+        console.log(myImportedData);
         let subdivisionsLayer;
         let subdivisionData = "data/GeoJSON/subDivTry8.json"
         let subdivisionDefaultStyle = {
@@ -460,6 +468,7 @@
             "Resource_Link_4": "https://drive.google.com/file/d/1FcMTRKCsRM4beWiFiYfaiSqlaPaElMh8/view?usp=sharing"
           }
         ]
+        // var historyData;
         let HistoricSubDivs = ['BATTERY HEIGHTS', 'BLOOMSBURY', 'BOYLAN HEIGHTS', 'CAMERON VILLAGE', 'COLLEGE PARK', 'FULLER HEIGHTS', 'GLENWOOD', 'HAYES BARTON', 'LONGVIEW GARDENS', 'METHOD', 'MORDECAI', 'OAKWOOD', 'PULLEN PARK TERRACE',
           'ROANOKE PARK', 'ROCHESTER HEIGHTS', 'VANGUARD PARK', 'OBERLIN VILLAGE', 'CAMERON PARK'
         ];
@@ -517,6 +526,7 @@
           const response = await fetch(api_url);
           const data = await response.json();
         }
+
         //HTML ELEM VARIABLES
         var prevArrow = document.getElementById('prevYearArrow');
         var nextArrow = document.getElementById('nextYearArrow');
@@ -539,65 +549,126 @@
 
 
         //MAP SETUP
-        var mymap = new L.Map('issMap', {
+        var rightSidebar
+        var zoomHome
+        var leftSidebar
+        let paneObjs= [
+            {
+              'paneName': 'allLayersPane',
+              'styleVars': {
+                'opacity': 0,
+                'zIndex': 500
+              }
+            },
+            {
+              'paneName': 'historyPane',
+              'styleVars': {
+                'opacity': 0,
+                'zIndex': 0
+              }
+            },
+            {
+            'paneName': 'historyStyleOverlay',
+            'styleVars': {
+              'opacity': 0,
+              'zIndex': 0,
+              'filter': "blur(3px)",
+              'mixblendmode': "overlay"
+            }
+          }
+        ]
+        let controlObjs = [
+          {
+            'controlName': 'rightSidebar',
+            'settings': {
+              'position': 'right',
+              'autoPan': false,
+              'closeButton': false
+            }
+          },
+          {
+            'controlName': 'leftSidebar',
+            'settings': {
+              'position': 'left'
+            }
+          },
+          {
+            'controlName': 'zoomHome',
+            'settings': {
+            }
+          }
+      ]
+        var mymap = new L.Map('raleighHousingMap', {
           center: new L.LatLng(35.7926, -78.6434),
-          zoom: 11.5,
+          zoom: 12.5,
           zoomControl: false,
           minZoom: 12,
           maxZoom: 14,
           fullscreenControl: true,
         });
+        var stripes;
 
-        mymap.scrollWheelZoom.disable();
-        mymap.dragging.disable();
+        mapInit(mymap)
 
-        mymap.on('click', function(e) {
-          var coord = e.latlng;
-          var lat = coord.lat;
-          var lng = coord.lng;
-        });
+        function mapInit(aMap) {
+          aMap.scrollWheelZoom.disable();
+          aMap.dragging.disable();
 
-        var leftSidebar = L.control.sidebar('leftSidebar', {
-          position: 'left'
-        });
+          stripes = new L.StripePattern({
+            color: 'rgba(255, 255, 255, 0.44)',
+            opacity: .3,
+            spaceWeight: .5,
+            weight: 1
+          });
 
-        mymap.addControl(leftSidebar);
+          stripes.addTo(aMap);
+          aMap.spin(true, spinnerSettings);
 
-        var rightSidebar = L.control.sidebar('rightSidebar', {
-          position: 'right',
-          autoPan: false,
-          closeButton: false
-        });
 
-        var zoomHome = L.Control.zoomHome();
-        zoomHome.addTo(mymap)
+          aMap.on('click', function(e) {
+            var coord = e.latlng;
+            var lat = coord.lat;
+            var lng = coord.lng;
+          });
+          createAddControls()
+          document.querySelector('#mainDataKeyInfoButton').addEventListener('mouseup', function(){
+           $('#howToUse').toggleClass('howToUseActive')
+           $('#howToUse').toggleClass('howToUseInactive')});
+          manageMapPanes(paneObjs, mymap)
 
-        mymap.addControl(rightSidebar);
-        rightSidebar.hide();
+        }
 
-        var stripes = new L.StripePattern({
-          color: 'rgba(255, 255, 255, 0.44)',
-          opacity: .3,
-          spaceWeight: .5,
-          weight: 1
-        });
-        stripes.addTo(mymap);
+        function createAddControls(){
+          leftSidebar = L.control.sidebar('leftSidebar', {
+            position: 'left'
+          });
 
-        mymap.spin(true, spinnerSettings);
-        mymap.createPane('allLayersPane');
-        mymap.createPane('historyPane');
-        mymap.createPane('historyStyleOverlay');
-        // mymap.createPane('backgroundPane')
+          mymap.addControl(leftSidebar);
+          rightSidebar = L.control.sidebar('rightSidebar', {
+            position: 'right',
+            autoPan: false,
+            closeButton: false
+          });
+          zoomHome = L.Control.zoomHome('zoomHomeButton');
+          mymap.addControl(rightSidebar);
+          mymap.addControl(leftSidebar)
+          rightSidebar.hide();
+          zoomHome.addTo(mymap)
+        }
 
-        mymap.getPane('allLayersPane').style.zIndex = 500;
-        mymap.getPane('allLayersPane').style.opacity = 0;
+        function manageMapPanes(somePaneObjs, aMap){
+         for (var i = 0; i < somePaneObjs.length; i++) {
+           let curPaneObj = somePaneObjs[i]
+           aMap.createPane(curPaneObj.paneName)
+           let stylePropsToChange = Object.keys(curPaneObj.styleVars)
+           let stylePropValues = Object.values(curPaneObj.styleVars)
 
-        mymap.getPane('historyPane').style.zIndex = 0;
-        mymap.getPane('historyPane').style.opacity = 0;
-        mymap.getPane('historyStyleOverlay').style.zIndex = 0;
-        mymap.getPane('historyStyleOverlay').style.opacity = 0;
-        mymap.getPane('historyStyleOverlay').style.filter = "blur(3px)";
-        mymap.getPane('historyStyleOverlay').style.mixblendmode = 'overlay';
+           for (var j = 0; j < stylePropsToChange.length; j++) {
+             let curStyleToChange = stylePropsToChange[j]
+             aMap.getPane(curPaneObj.paneName).style[curStyleToChange] = stylePropValues[j]
+           }
+         }
+        }
 
 
         //ADD MAP LAYERS
@@ -617,6 +688,14 @@
             fillOpacity: .5
           }
         }).addTo(mymap);
+
+
+        // var mapGeoJSON = {
+        //   'name':
+        //   'url':
+        //   'callback':
+        //
+        // }
 
         var raleighLimitsBounds = raleighLimitsLayer.getBounds();
 
@@ -665,7 +744,6 @@
             let popUpImageLink = historyObjecTry2.Image_1_Link;
             let content =
             '<div class = "histPopUpContainer">' +
-
               '<h1 id = "histPopUpHeader" class = "popUpHeader">' + subDivNameProperty + '<p class = "histEstDate" >' + 'est: ' + yrApproved + '</p>' +
               '</h1>' +
                 '<button class = "popUpHistLink" id = "historyLink" onclick = "toggleLeftSidebar()" >' + "VIEW HISTORY>>>" + '</button>' +
@@ -1621,8 +1699,6 @@
             })
           curActiveKey.initialDisplay = false;
         }
-
-
 
         //DATA
         function checkValues(featurePropVal, soloObjs, noSoloStyle, shouldRemoveCommas){
